@@ -1,6 +1,16 @@
-import { createSlice, PayloadAction, CaseReducer } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, CaseReducer, Action } from '@reduxjs/toolkit';
 import type { CatalogState, CatalogItem, Filters } from './catalogTypes';
 import { loadInitialVehicles, loadMoreVehicles, fetchVehicleById } from './catalogThunks';
+import type { FetchVehiclesApiResponse, FetchVehiclesParams } from './catalogThunks';
+
+interface FulfilledAction<Payload, ThunkArg> extends Action<string> {
+  payload: Payload;
+  meta: {
+    arg: ThunkArg;
+    requestId: string;
+    requestStatus: 'fulfilled';
+  };
+}
 
 const initialState: CatalogState = {
   items: [],
@@ -25,15 +35,9 @@ const handlePending: CaseReducer<CatalogState> = (state) => {
   state.error = null;
 };
 
-const handleRejected: CaseReducer<CatalogState, PayloadAction<unknown>> = (state, action) => {
+const handleRejected: CaseReducer<CatalogState, PayloadAction<string | undefined>> = (state, action) => {
   state.isLoading = false;
-  state.error = action.payload as string || 'An unknown error occurred';
-};
-
-type VehiclesFetchedPayload = {
-  cars: CatalogItem[];
-  totalCars: number;
-  page: string;
+  state.error = action.payload || 'An unknown error occurred';
 };
 
 const catalogSlice = createSlice({
@@ -65,25 +69,23 @@ const catalogSlice = createSlice({
   extraReducers: builder =>
     builder
       .addCase(loadInitialVehicles.pending, handlePending)
-      .addCase(loadInitialVehicles.fulfilled, (state, action: PayloadAction<VehiclesFetchedPayload>) => {
-        if (action.meta.arg.page === 1) {
-          state.items = action.payload.cars;
-        } else {
-          state.items = action.payload.cars; 
-        }
-        state.page = parseInt(action.payload.page, 10);
-        state.totalItems = action.payload.totalCars;
-        state.totalPages = Math.ceil(action.payload.totalCars / state.limit);
+      .addCase(loadInitialVehicles.fulfilled, (state, action: FulfilledAction<FetchVehiclesApiResponse, FetchVehiclesParams>) => {
+        state.items = action.payload.cars || [];
+        state.page = action.payload.page ? parseInt(action.payload.page, 10) : 1;
+        state.totalItems = action.payload.totalCars || 0;
+        state.totalPages = Math.ceil((action.payload.totalCars || 0) / state.limit);
         state.isLoading = false;
       })
       .addCase(loadInitialVehicles.rejected, handleRejected)
 
       .addCase(loadMoreVehicles.pending, handlePending)
-      .addCase(loadMoreVehicles.fulfilled, (state, action: PayloadAction<VehiclesFetchedPayload>) => {
-        state.items.push(...action.payload.cars);
-        state.page = parseInt(action.payload.page, 10);
-        state.totalItems = action.payload.totalCars;
-        state.totalPages = Math.ceil(action.payload.totalCars / state.limit);
+      .addCase(loadMoreVehicles.fulfilled, (state, action: FulfilledAction<FetchVehiclesApiResponse, FetchVehiclesParams>) => {
+        state.items.push(...(action.payload.cars || []));
+        state.page = action.payload.page ? parseInt(action.payload.page, 10) : state.page;
+        if (action.payload.totalCars !== undefined) {
+            state.totalItems = action.payload.totalCars;
+            state.totalPages = Math.ceil(action.payload.totalCars / state.limit);
+        }
         state.isLoading = false;
       })
       .addCase(loadMoreVehicles.rejected, handleRejected)
