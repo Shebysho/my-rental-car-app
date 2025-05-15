@@ -15,17 +15,17 @@ const VehicleList = ({ vehicles, onOpenModal }: VehicleListProps) => {
   return (
     <Grid 
       container 
-      spacing={4}
+      spacing={3.625}
       justifyContent="center"
     >
       {vehicles.map((vehicle) => (
         <Grid 
           item 
           key={vehicle.id}
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
+          xs={12} 
+          sm={6}  
+          md={4}  
+          lg={3}  
           sx={{ 
             display: 'flex', 
             justifyContent: 'center',

@@ -65,7 +65,7 @@ const VehicleFilters = () => {
       borderColor: 'rgba(18, 20, 23, 0.2)',
     },
     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: (theme: any) => theme.palette.primary.light,
+      borderColor: (theme: any) => theme.palette.primary.light, // Додано (theme: any) для уникнення помилки типу
     },
     '.MuiSvgIcon-root ': {
       color: '#121417',
@@ -96,7 +96,7 @@ const VehicleFilters = () => {
         borderColor: 'rgba(18, 20, 23, 0.2)',
       },
       '&.Mui-focused fieldset': {
-        borderColor: (theme: any) => theme.palette.primary.light,
+        borderColor: (theme: any) => theme.palette.primary.light, // Додано (theme: any)
       },
     },
     '& .MuiInputBase-input': {

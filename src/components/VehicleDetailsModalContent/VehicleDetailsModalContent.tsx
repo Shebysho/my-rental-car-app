@@ -8,7 +8,7 @@ import {
   TextField
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import type { CatalogItem } from '@/redux/catalog/catalogTypes'; 
+import type { CatalogItem } from '@/redux/catalog/catalogTypes'; // Залишаємо, бо vehicle типізується
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -31,7 +31,7 @@ const BookingSchema = Yup.object().shape({
 
 const VehicleDetailsModalContent = ({ vehicleId, onClose }: VehicleDetailsModalContentProps) => {
   const dispatch = useAppDispatch();
-  const vehicle: CatalogItem | null = useAppSelector(selectCurrentVehicle); // Явно типізуємо vehicle
+  const vehicle: CatalogItem | null = useAppSelector(selectCurrentVehicle);
   const isLoading = useAppSelector(selectIsLoading);
   const error = useAppSelector(selectError);
 
