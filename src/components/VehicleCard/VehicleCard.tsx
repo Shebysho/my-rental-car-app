@@ -1,10 +1,8 @@
-import React from 'react';
 import {
   Box,
   Card,
   CardContent,
   CardMedia,
-  Divider,
   Stack,
   Typography,
   Button,
@@ -15,6 +13,7 @@ import type { CatalogItem } from '@/redux/catalog/catalogTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { addFavourite, removeFavourite } from '@/redux/catalog/catalogSlice';
 import { selectFavourites } from '@/redux/catalog/catalogSelectors';
+import { Link as RouterLink } from 'react-router-dom';
 
 type VehicleCardProps = {
   vehicle: CatalogItem;
@@ -40,8 +39,8 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
     }
   };
   
-  const formattedMileage = vehicle?.mileage != null 
-    ? vehicle.mileage.toLocaleString('de-DE')
+  const formattedMileageText = vehicle?.mileage != null 
+    ? `${vehicle.mileage.toLocaleString('de-DE')} km`
     : '';
 
   const details = [
@@ -50,6 +49,7 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
     vehicle?.rentalCompany,
     vehicle?.type,
     vehicle?.make,
+    formattedMileageText,
     vehicle?.functionalities?.[0] 
   ].filter(Boolean);
 
@@ -92,7 +92,7 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
               color: 'rgba(255, 255, 255, 1)',
             },
             ...(isFavourite && {
-              color: '#3470FF',
+              color: (theme) => theme.palette.primary.light, 
             }),
             zIndex: 1,
           }}
@@ -106,16 +106,16 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
           direction="row"
           sx={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}
         >
-          <Typography component="h3" sx={{ fontSize: '16px', fontWeight: 500, lineHeight: 1.5, color: '#121417', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', pr: 1 }}>
+          <Typography component="h3" sx={{ fontSize: '16px', fontWeight: 500, lineHeight: 1.5, color: (theme) => theme.palette.text.primary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', pr: 1 }}>
             {vehicle?.make || ''}{' '}
             {vehicle?.model && (
-              <Box component="span" sx={{ color: '#3470FF' }}> 
+              <Box component="span" sx={{ color: (theme) => theme.palette.primary.light }}> 
                 {vehicle.model.length > 8 ? `${vehicle.model.substring(0,8)}...` : vehicle.model} 
               </Box>
             )}
             {vehicle?.year && `, ${vehicle.year}`}
           </Typography>
-          <Typography sx={{ fontSize: '16px', fontWeight: 500, lineHeight: 1.5, color: '#121417', whiteSpace: 'nowrap', pl:1 }}>
+          <Typography sx={{ fontSize: '16px', fontWeight: 500, lineHeight: 1.5, color: (theme) => theme.palette.text.primary, whiteSpace: 'nowrap', pl:1 }}>
             {vehicle?.rentalPrice || ''}
           </Typography>
         </Stack>
@@ -124,7 +124,7 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
           <Typography
             variant="body2"
             sx={{
-              color: 'rgba(18, 20, 23, 0.5)',
+              color: (theme) => theme.palette.text.secondary,
               fontSize: '12px',
               lineHeight: 1.5,
               height: '36px',
@@ -147,11 +147,12 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
             marginTop: 'auto', 
             paddingY: '12px', 
             borderRadius: '12px', 
-            bgcolor: '#3470FF', 
+            bgcolor: (theme) => theme.palette.primary.light, 
             fontSize: '14px',
             fontWeight: 600,
             textTransform: 'none',
-            '&:hover': { bgcolor: '#0B44CD' } 
+            color: (theme) => theme.palette.common.white,
+            '&:hover': { bgcolor: (theme) => theme.palette.primary.main } 
           }}
         >
           Read more
