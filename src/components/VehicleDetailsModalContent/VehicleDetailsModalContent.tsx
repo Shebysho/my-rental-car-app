@@ -8,7 +8,7 @@ import {
   TextField
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import type { CatalogItem } from '@/redux/catalog/catalogTypes';
+import type { CatalogItem } from '@/redux/catalog/catalogTypes'; 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -31,7 +31,7 @@ const BookingSchema = Yup.object().shape({
 
 const VehicleDetailsModalContent = ({ vehicleId, onClose }: VehicleDetailsModalContentProps) => {
   const dispatch = useAppDispatch();
-  const vehicle = useAppSelector(selectCurrentVehicle);
+  const vehicle: CatalogItem | null = useAppSelector(selectCurrentVehicle); // Явно типізуємо vehicle
   const isLoading = useAppSelector(selectIsLoading);
   const error = useAppSelector(selectError);
 
@@ -122,7 +122,7 @@ const VehicleDetailsModalContent = ({ vehicleId, onClose }: VehicleDetailsModalC
         sx={{ width: '100%', height: 248, objectFit: 'cover', borderRadius: '14px', display: 'block', mb: '14px' }}
       />
       <Typography variant="body1" component="h2" sx={{ fontWeight: 500, fontSize: '18px', lineHeight: 1.333, mb: '8px', color: '#121417' }}>
-        {vehicle.make || 'N/A'} <Box component="span" sx={{ color: vehicle.model ? 'primary.main' : 'inherit' }}>{vehicle.model || 'N/A'}</Box>, {vehicle.year || 'N/A'}
+        {vehicle.make || 'N/A'} <Box component="span" sx={{ color: vehicle.model ? 'primary.light' : 'inherit' }}>{vehicle.model || 'N/A'}</Box>, {vehicle.year || 'N/A'}
       </Typography>
 
       <Stack direction="row" spacing={0.75} sx={{ color: 'rgba(18, 20, 23, 0.5)', fontSize: '12px', lineHeight: 1.5, mb: 0.5 }} flexWrap="wrap" useFlexGap>
@@ -272,14 +272,15 @@ const VehicleDetailsModalContent = ({ vehicleId, onClose }: VehicleDetailsModalC
                 sx={{ 
                   padding: '12px 50px', 
                   borderRadius: '12px', 
-                  bgcolor: '#3470FF', 
+                  bgcolor: (theme) => theme.palette.primary.light, 
                   fontSize: '14px',
                   fontWeight: 600,
                   lineHeight: 1.428,
                   textTransform: 'none',
                   alignSelf: 'flex-start',
                   mt: '10px', 
-                  '&:hover': { bgcolor: '#0B44CD' } 
+                  color: (theme) => theme.palette.common.white,
+                  '&:hover': { bgcolor: (theme) => theme.palette.primary.main } 
                 }}
               >
                 Rent

@@ -13,7 +13,6 @@ import type { CatalogItem } from '@/redux/catalog/catalogTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { addFavourite, removeFavourite } from '@/redux/catalog/catalogSlice';
 import { selectFavourites } from '@/redux/catalog/catalogSelectors';
-import { Link as RouterLink } from 'react-router-dom';
 
 type VehicleCardProps = {
   vehicle: CatalogItem;
@@ -43,7 +42,7 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
     ? `${vehicle.mileage.toLocaleString('de-DE')} km`
     : '';
 
-  const details = [
+  const detailsArray = [
     city,
     country,
     vehicle?.rentalCompany,
@@ -134,7 +133,7 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
               WebkitBoxOrient: 'vertical',
             }}
           >
-            {details.join(' | ')}
+            {detailsArray.join(' | ')}
           </Typography>
         </Box>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { setFilters } from '@/redux/catalog/catalogSlice';
 import { selectFilters } from '@/redux/catalog/catalogSelectors';
@@ -65,7 +65,7 @@ const VehicleFilters = () => {
       borderColor: 'rgba(18, 20, 23, 0.2)',
     },
     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#3470FF',
+      borderColor: (theme: any) => theme.palette.primary.light,
     },
     '.MuiSvgIcon-root ': {
       color: '#121417',
@@ -77,7 +77,7 @@ const VehicleFilters = () => {
     fontWeight: 500,
     color: '#8A8A8F',
     mb: '8px',
-    position: 'static',
+    position: 'static' as 'static',
     transform: 'none',
     '&.Mui-focused': {
         color: '#8A8A8F',
@@ -96,7 +96,7 @@ const VehicleFilters = () => {
         borderColor: 'rgba(18, 20, 23, 0.2)',
       },
       '&.Mui-focused fieldset': {
-        borderColor: '#3470FF',
+        borderColor: (theme: any) => theme.palette.primary.light,
       },
     },
     '& .MuiInputBase-input': {
@@ -116,15 +116,18 @@ const VehicleFilters = () => {
           value={make}
           onChange={(e: SelectChangeEvent<string>) => setMake(e.target.value)}
           displayEmpty
-          input={<OutlinedInput notched={false} id="make-select-input" />}
+          input={<OutlinedInput notched={false} id="make-select-input" sx={{fontSize: '18px', fontWeight: 500, lineHeight: 1.11, color: '#121417'}} />}
           sx={{...commonSelectStyles, width: 224 }}
           MenuProps={{ PaperProps: { sx: { borderRadius: '14px', marginTop: '4px', maxHeight: 272 }}}}
+          renderValue={(selected) => {
+            if (selected === "") {
+              return <Box component="span" sx={{ fontStyle: 'normal', color: '#121417', fontSize: '18px', fontWeight: 500 }}>Choose a brand</Box>;
+            }
+            return selected;
+          }}
         >
-          <MenuItem value="" disabled sx={{display: 'none'}}>
-            <Box component="span" sx={{ fontStyle: 'normal', color: 'rgba(18, 20, 23, 0.20)', fontSize: '16px', fontWeight: 500 }}>Choose a brand</Box>
-          </MenuItem>
           {MOCK_MAKES.map((brand) => (
-            <MenuItem key={brand} value={brand} sx={{fontSize: '16px', color: 'rgba(18, 20, 23, 0.20)', '&:hover': {color: '#121417'}, '&.Mui-selected': {color: '#121417', backgroundColor: 'rgba(52, 112, 255, 0.1)'}}}>{brand}</MenuItem>
+            <MenuItem key={brand} value={brand} sx={{fontSize: '16px', color: 'rgba(18, 20, 23, 0.20)', '&:hover': {color: '#121417'}, '&.Mui-selected': {color: '#121417', backgroundColor: 'rgba(52, 112, 255, 0.05)'}}}>{brand}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -135,15 +138,18 @@ const VehicleFilters = () => {
           value={rentalPrice}
           onChange={(e: SelectChangeEvent<string>) => setRentalPrice(e.target.value)}
           displayEmpty
-          input={<OutlinedInput notched={false} id="price-select-input" />}
+          input={<OutlinedInput notched={false} id="price-select-input" sx={{fontSize: '18px', fontWeight: 500, lineHeight: 1.11, color: '#121417'}}/>}
           sx={{ ...commonSelectStyles, width: 125 }}
           MenuProps={{ PaperProps: { sx: { borderRadius: '14px', marginTop: '4px', maxHeight: 272 }}}}
+          renderValue={(selected) => {
+            if (selected === "") {
+              return <Box component="span" sx={{ fontStyle: 'normal', color: '#121417', fontSize: '18px', fontWeight: 500 }}>To $</Box>;
+            }
+            return `To $${selected}`;
+          }}
         >
-          <MenuItem value="" disabled sx={{display: 'none'}}>
-            <Box component="span" sx={{ fontStyle: 'normal', color: 'rgba(18, 20, 23, 0.20)', fontSize: '16px', fontWeight: 500 }}>Choose a price</Box>
-          </MenuItem>
           {priceRangeOptions().map(option => (
-            <MenuItem key={option.value} value={String(option.value)} sx={{fontSize: '16px', color: 'rgba(18, 20, 23, 0.20)', '&:hover': {color: '#121417'}, '&.Mui-selected': {color: '#121417', backgroundColor: 'rgba(52, 112, 255, 0.1)'}}}>{option.label}</MenuItem>
+            <MenuItem key={option.value} value={String(option.value)} sx={{fontSize: '16px', color: 'rgba(18, 20, 23, 0.20)', '&:hover': {color: '#121417'}, '&.Mui-selected': {color: '#121417', backgroundColor: 'rgba(52, 112, 255, 0.05)'}}}>{option.label}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -162,7 +168,7 @@ const VehicleFilters = () => {
               width: 160,
               '& .MuiOutlinedInput-root': {
                 ...commonTextFieldStyles['& .MuiOutlinedInput-root'],
-                borderTopRightRadius: 0,
+                borderTopRightRadius: 0, 
                 borderBottomRightRadius: 0,
                 borderRight: '1px solid rgba(138, 138, 137, 0.20)',
               }
@@ -179,7 +185,7 @@ const VehicleFilters = () => {
               width: 160,
               '& .MuiOutlinedInput-root': {
                 ...commonTextFieldStyles['& .MuiOutlinedInput-root'],
-                borderTopLeftRadius: 0,
+                borderTopLeftRadius: 0, 
                 borderBottomLeftRadius: 0,
               }
             }}
@@ -193,14 +199,15 @@ const VehicleFilters = () => {
         sx={{ 
             height: '48px', 
             px: '44px', 
-            bgcolor: '#3470FF', 
+            bgcolor: (theme) => theme.palette.primary.light, 
             borderRadius: '12px',
             fontSize: '14px',
             fontWeight: 600,
             lineHeight: 1.428,
             textTransform: 'none',
             boxShadow: 'none',
-            '&:hover': { bgcolor: '#0B44CD', boxShadow: 'none' }
+            color: 'white',
+            '&:hover': { bgcolor: (theme) => theme.palette.primary.main, boxShadow: 'none' }
         }}>
         Search
       </Button>
