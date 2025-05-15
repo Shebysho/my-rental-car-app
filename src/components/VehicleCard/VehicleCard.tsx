@@ -13,7 +13,7 @@ import type { CatalogItem } from '@/redux/catalog/catalogTypes';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { addFavourite, removeFavourite } from '@/redux/catalog/catalogSlice';
 import { selectFavourites } from '@/redux/catalog/catalogSelectors';
-import React from 'react'; // Додано, якщо React.Fragment використовується
+import React from 'react'; 
 
 type VehicleCardProps = {
   vehicle: CatalogItem;
@@ -49,7 +49,7 @@ const VehicleCard = ({ vehicle, onOpenModal }: VehicleCardProps) => {
     vehicle?.rentalCompany,
     vehicle?.type,
     vehicle?.make,
-    formattedMileageText, // formattedMileageText тепер використовується тут
+    formattedMileageText, 
     vehicle?.functionalities?.[0] 
   ].filter(Boolean);
 

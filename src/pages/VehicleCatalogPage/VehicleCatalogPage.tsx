@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Container, Typography, Modal } from '@mui/material';
 import { useAppDispatch, useCatalogState } from '@/hooks/reduxHooks';
 import { catalogOperations } from '@/redux';
@@ -16,7 +16,7 @@ const modalStyle = {
   borderRadius: '24px',
   boxShadow: 24,
   p: { xs: '24px', md: '40px' },
-  maxHeight: '95vh', // Збільшено для вмісту
+  maxHeight: '95vh',
   overflowY: 'auto',
 };
 
@@ -28,7 +28,7 @@ const VehicleCatalogPage = () => {
     isLoading,
     page,
     totalPages,
-    error
+    error 
   } = useCatalogState();
 
   const [openModal, setOpenModal] = useState(false);
@@ -62,7 +62,7 @@ const VehicleCatalogPage = () => {
   } else if (error && !selectedVehicleId) {
     contentDisplay = <Typography color="error" sx={{ textAlign: 'center', width: '100%', mt: 4 }}>Error: {error}</Typography>;
   } else if (!isLoading && vehicles && vehicles.length === 0 && !selectedVehicleId) {
-    contentDisplay = <Typography sx={{ textAlign: 'center', width: '100%', mt: 4 }}>No vehicles found matching your criteria.</Typography>;
+    contentDisplay = <Typography sx={{ textAlign: 'center', width: '100%', mt: 4 }}>No vehicles found.</Typography>;
   } else if (vehicles && vehicles.length > 0) {
     contentDisplay = <VehicleList vehicles={vehicles} onOpenModal={handleOpenModal} />;
   }
@@ -70,20 +70,15 @@ const VehicleCatalogPage = () => {
   return (
     <Box
       component="section"
-      sx={{
-        paddingTop: '40px',
-        paddingBottom: '100px',
-      }}
+      sx={{ paddingTop: '40px', paddingBottom: '100px' }}
     >
       <Container>
         <Box sx={{ marginBottom: '50px' }}>
           <VehicleFilters />
         </Box>
-
         <Box> 
           {contentDisplay}
         </Box>
-        
         {page < totalPages && !isLoading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
             <Button
@@ -92,16 +87,10 @@ const VehicleCatalogPage = () => {
               disabled={isLoading}
               sx={{ 
                 color: 'white',
-                bgcolor: '#3470FF',
-                paddingX: '44px',
-                paddingY: '12px',
-                textTransform: 'none',
-                fontWeight: 600,
-                fontSize: '16px',
-                borderRadius: '12px',
-                '&:hover': {
-                  bgcolor: '#0B44CD',
-                }
+                bgcolor: (theme) => theme.palette.primary.light,
+                paddingX: '44px', paddingY: '12px', textTransform: 'none',
+                fontWeight: 600, fontSize: '16px', borderRadius: '12px',
+                '&:hover': { bgcolor: (theme) => theme.palette.primary.main }
               }}
             >
               Load More
@@ -109,7 +98,6 @@ const VehicleCatalogPage = () => {
           </Box>
         )}
       </Container>
-
       <Modal
         open={openModal}
         onClose={handleCloseModal}

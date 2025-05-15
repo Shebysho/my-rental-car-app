@@ -1,6 +1,5 @@
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { CatalogItem } from '@/redux/catalog/catalogTypes';
+import type { CatalogItem } from '@/redux/catalog/catalogTypes';
 import VehicleCard from '../VehicleCard/VehicleCard';
 
 type VehicleListProps = {
@@ -14,25 +13,19 @@ const VehicleList = ({ vehicles, onOpenModal }: VehicleListProps) => {
   }
 
   return (
-    <Grid 
-      container 
-      spacing={4}
-      justifyContent="center" 
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        gap: '29px', 
+        rowGap: '50px',
+      }}
     >
       {vehicles.map((vehicle) => (
-        <Grid 
-          item 
-          key={vehicle.id}
-          xs={12} 
-          sm={6}  
-          md={4}  
-          lg={3}  
-          sx={{display: 'flex', justifyContent: 'center'}} 
-        >
-          <VehicleCard vehicle={vehicle} onOpenModal={onOpenModal} />
-        </Grid>
+        <VehicleCard key={vehicle.id} vehicle={vehicle} onOpenModal={onOpenModal} />
       ))}
-    </Grid>
+    </Box>
   );
 };
 

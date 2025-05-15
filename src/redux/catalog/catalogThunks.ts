@@ -22,10 +22,10 @@ export const loadInitialVehicles = createAsyncThunk<
       const { data } = await axiosInstance.get<FetchVehiclesApiResponse>('/cars', { params });
       return data;
     } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data?.message || 'Failed to load vehicles.');
+      if (isAxiosError(error) && error.response && typeof error.response.data?.message === 'string') {
+        return rejectWithValue(error.response.data.message);
       }
-      return rejectWithValue('An unexpected error occurred while loading vehicles.');
+      return rejectWithValue('Failed to load vehicles.');
     }
   }
 );
@@ -41,10 +41,10 @@ export const loadMoreVehicles = createAsyncThunk<
       const { data } = await axiosInstance.get<FetchVehiclesApiResponse>('/cars', { params });
       return data;
     } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data?.message || 'Failed to load more vehicles.');
+      if (isAxiosError(error) && error.response && typeof error.response.data?.message === 'string') {
+        return rejectWithValue(error.response.data.message);
       }
-      return rejectWithValue('An unexpected error occurred while loading more vehicles.');
+      return rejectWithValue('Failed to load more vehicles.');
     }
   }
 );
@@ -60,10 +60,10 @@ export const fetchVehicleById = createAsyncThunk<
       const { data } = await axiosInstance.get<CatalogItem>(`/cars/${id}`);
       return data;
     } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data?.message || `Failed to load vehicle details for ID: ${id}.`);
+      if (isAxiosError(error) && error.response && typeof error.response.data?.message === 'string') {
+        return rejectWithValue(error.response.data.message);
       }
-      return rejectWithValue('An unexpected error occurred while fetching vehicle details.');
+      return rejectWithValue(`Failed to load vehicle details for ID: ${id}.`);
     }
   }
 );

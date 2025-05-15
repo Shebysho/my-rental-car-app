@@ -1,14 +1,15 @@
-import { createSlice, PayloadAction, CaseReducer, AnyAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit';
 import type { CatalogState, CatalogItem, Filters } from './catalogTypes';
 import { loadInitialVehicles, loadMoreVehicles, fetchVehicleById } from './catalogThunks';
 import type { FetchVehiclesApiResponse, FetchVehiclesParams } from './catalogThunks';
 
 interface FulfilledThunkAction<Returned, ThunkArg> extends PayloadAction<Returned, string, {arg: ThunkArg, requestId: string, requestStatus: 'fulfilled'}> {}
 
+interface RejectedActionPayloadWithMessage { message?: string; }
 interface RejectedThunkAction extends AnyAction {
-  error: Error;
+  error: Error & { code?: string };
   meta: { arg: any; requestId: string; aborted?: boolean; condition?: boolean; rejectedWithValue?: boolean; };
-  payload?: unknown;
+  payload?: RejectedActionPayloadWithMessage | string | unknown;
 }
 
 const initialState: CatalogState = {
@@ -24,16 +25,19 @@ const initialState: CatalogState = {
   error: null,
 };
 
-const handlePending: CaseReducer<CatalogState> = (state) => {
+const handlePending = (state: CatalogState) => {
   state.isLoading = true;
   state.error = null;
 };
 
-const handleRejected: CaseReducer<CatalogState, RejectedThunkAction | AnyAction > = (state, action) => {
+const handleRejected = (state: CatalogState, action: RejectedThunkAction) => {
   state.isLoading = false;
-  if (action.payload && typeof action.payload === 'string') {
+  const payloadAsWithMessage = action.payload as RejectedActionPayloadWithMessage;
+  if (payloadAsWithMessage && typeof payloadAsWithMessage.message === 'string') {
+    state.error = payloadAsWithMessage.message;
+  } else if (typeof action.payload === 'string') {
     state.error = action.payload;
-  } else if (action.error && action.error.message) {
+  } else if (action.error && typeof action.error.message === 'string') {
     state.error = action.error.message;
   } else {
     state.error = 'An unknown error occurred';
@@ -45,26 +49,17 @@ const catalogSlice = createSlice({
   initialState,
   reducers: {
     addFavourite: (state, action: PayloadAction<string>) => {
-      if (!state.favourites.includes(action.payload)) {
-        state.favourites.push(action.payload);
-      }
+      if (!state.favourites.includes(action.payload)) { state.favourites.push(action.payload); }
     },
     removeFavourite: (state, action: PayloadAction<string>) => {
       state.favourites = state.favourites.filter(id => id !== action.payload);
     },
     setFilters: (state, action: PayloadAction<Partial<Filters>>) => {
       state.filters = { ...state.filters, ...action.payload };
-      state.page = 1;
-      state.items = [];
-      state.totalPages = 0;
-      state.totalItems = 0;
+      state.page = 1; state.items = []; state.totalPages = 0; state.totalItems = 0;
     },
-    setPage: (state, action: PayloadAction<number>) => {
-      state.page = action.payload;
-    },
-    clearCurrentVehicle: state => {
-      state.currentVehicle = null;
-    },
+    setPage: (state, action: PayloadAction<number>) => { state.page = action.payload; },
+    clearCurrentVehicle: state => { state.currentVehicle = null; },
   },
   extraReducers: builder =>
     builder
@@ -74,7 +69,7 @@ const catalogSlice = createSlice({
         state.page = action.payload.page ? parseInt(action.payload.page, 10) : 1;
         const totalCarsValue = action.payload.totalCars;
         state.totalItems = typeof totalCarsValue === 'number' ? totalCarsValue : 0;
-        state.totalPages = state.limit > 0 ? Math.ceil(state.totalItems / state.limit) : 0;
+        state.totalPages = state.limit > 0 && state.totalItems > 0 ? Math.ceil(state.totalItems / state.limit) : 0;
         state.isLoading = false;
       })
       .addCase(loadInitialVehicles.rejected, handleRejected)
@@ -85,7 +80,7 @@ const catalogSlice = createSlice({
         const totalCarsValue = action.payload.totalCars;
         if (typeof totalCarsValue === 'number') {
             state.totalItems = totalCarsValue;
-            state.totalPages = state.limit > 0 ? Math.ceil(totalCarsValue / state.limit) : 0;
+            state.totalPages = state.limit > 0 && state.totalItems > 0 ? Math.ceil(totalCarsValue / state.limit) : 0;
         }
         state.isLoading = false;
       })

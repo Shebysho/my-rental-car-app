@@ -7,55 +7,30 @@ const textColorSecondary = alpha(textColorPrimary, 0.5);
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: primaryMainColor,
-      light: primaryLightColor, 
-    },
-    text: {
-      primary: textColorPrimary,
-      secondary: textColorSecondary,
-    },
-    background: {
-      default: '#FFFFFF',
-      paper: '#FFFFFF', 
-    },
+    primary: { main: primaryMainColor, light: primaryLightColor },
+    text: { primary: textColorPrimary, secondary: textColorSecondary },
+    background: { default: '#FFFFFF', paper: '#FFFFFF' },
     divider: alpha(textColorPrimary, 0.1), 
   },
   typography: {
     fontFamily: ['Manrope', 'Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'].join(','),
     fontSize: 16,
-    h1: {
-      fontSize: 'clamp(2.5rem, 5vw, 3.75rem)',
-      fontWeight: 700,
-      lineHeight: 1.2,
-      color: textColorPrimary,
-    },
-    h2: {
-      fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
-      fontWeight: 600,
-      lineHeight: 1.33,
-      color: textColorPrimary,
-    },
+    h1: { fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', fontWeight: 700, lineHeight: 1.2, color: textColorPrimary },
+    h2: { fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', fontWeight: 600, lineHeight: 1.33, color: textColorPrimary },
+    navLink: { 
+      fontSize: '16px', fontWeight: 500, lineHeight: 1.5,
+      textDecoration: 'none', transition: 'color 0.2s ease-in-out',
+      borderBottom: '2px solid transparent',
+    }
   },
   breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
+    values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 },
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         html: { height: '100%', scrollBehavior: 'smooth' },
-        body: {
-          backgroundColor: '#FFFFFF', 
-          color: textColorPrimary,
-          lineHeight: '1.5', minHeight: '100%',
-          display: 'flex', flexDirection: 'column',
-        },
+        body: { backgroundColor: '#FFFFFF', color: textColorPrimary, lineHeight: '1.5', minHeight: '100%', display: 'flex', flexDirection: 'column' },
         '#root': { flexGrow: 1, display: 'flex', flexDirection: 'column' },
         main: { flexGrow: 1 },
         ul: { listStyle: 'none', padding: 0, margin: 0 },
@@ -67,10 +42,8 @@ const theme = createTheme({
       variants: [{
         props: { variant: 'navLink' },
         style: ({ theme: t }) => ({
-          fontSize: '16px', fontWeight: 500, lineHeight: 1.5,
-          color: t.palette.text.primary, paddingTop: '23px', paddingBottom: '23px',
-          textDecoration: 'none', transition: 'color 0.2s ease-in-out, border-color 0.2s ease-in-out',
-          borderBottom: '2px solid transparent',
+          color: t.palette.text.primary, 
+          paddingTop: '23px', paddingBottom: '23px',
           '&:hover': { color: t.palette.primary.light },
           '&.active': { color: t.palette.primary.light },
         }),
@@ -103,7 +76,7 @@ const theme = createTheme({
         }),
       }],
     },
-    MuiSelect: { /* Ваші узгоджені стилі з попередніх версій */ },
+    MuiSelect: { /* Ваші узгоджені стилі */ },
     MuiMenuItem: { /* Ваші узгоджені стилі */ },
     MuiInputLabel: { /* Ваші узгоджені стилі */ },
     MuiOutlinedInput: { /* Ваші узгоджені стилі */ },
