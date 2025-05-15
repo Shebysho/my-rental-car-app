@@ -3,14 +3,14 @@ import React from 'react';
 
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
-    xs: false;
-    sm: false;
-    md: false;
-    lg: false;
-    xl: false;
-    mobile: true;
-    tablet: true;
-    desktop: true;
+    xs: true;
+    sm: true;
+    md: true;
+    lg: true;
+    xl: true;
+    mobile: false;
+    tablet: false;
+    desktop: false;
   }
   interface TypographyVariants {
     navLink: React.CSSProperties;
