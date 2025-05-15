@@ -3,29 +3,12 @@ import type { CatalogState, CatalogItem, Filters } from './catalogTypes';
 import { loadInitialVehicles, loadMoreVehicles, fetchVehicleById } from './catalogThunks';
 import type { FetchVehiclesApiResponse, FetchVehiclesParams } from './catalogThunks';
 
-interface RejectedAction extends AnyAction {
-  payload: string | undefined; 
-  meta: {
-    arg: any; 
-    requestId: string;
-    aborted: boolean;
-    condition: boolean;
-  };
-  error: {
-    message?: string;
-    name?: string;
-    stack?: string;
-    code?: string;
-  };
-}
+interface FulfilledThunkAction<Returned, ThunkArg> extends PayloadAction<Returned, string, {arg: ThunkArg, requestId: string, requestStatus: 'fulfilled'}> {}
 
-interface FulfilledThunkAction<Returned, ThunkArg> extends AnyAction {
-  payload: Returned;
-  meta: {
-    arg: ThunkArg;
-    requestId: string;
-    requestStatus: 'fulfilled';
-  };
+interface RejectedThunkAction extends AnyAction {
+  error: Error;
+  meta: { arg: any; requestId: string; aborted?: boolean; condition?: boolean; rejectedWithValue?: boolean; };
+  payload?: unknown;
 }
 
 const initialState: CatalogState = {
@@ -46,9 +29,15 @@ const handlePending: CaseReducer<CatalogState> = (state) => {
   state.error = null;
 };
 
-const handleRejectedReducer: CaseReducer<CatalogState, RejectedAction> = (state, action) => {
+const handleRejected: CaseReducer<CatalogState, RejectedThunkAction | AnyAction > = (state, action) => {
   state.isLoading = false;
-  state.error = action.payload || action.error.message || 'An unknown error occurred';
+  if (action.payload && typeof action.payload === 'string') {
+    state.error = action.payload;
+  } else if (action.error && action.error.message) {
+    state.error = action.error.message;
+  } else {
+    state.error = 'An unknown error occurred';
+  }
 };
 
 const catalogSlice = createSlice({
@@ -83,32 +72,30 @@ const catalogSlice = createSlice({
       .addCase(loadInitialVehicles.fulfilled, (state, action: FulfilledThunkAction<FetchVehiclesApiResponse, FetchVehiclesParams>) => {
         state.items = action.payload.cars || [];
         state.page = action.payload.page ? parseInt(action.payload.page, 10) : 1;
-        const totalCars = action.payload.totalCars || 0;
-        state.totalItems = totalCars;
-        state.totalPages = state.limit > 0 ? Math.ceil(totalCars / state.limit) : 0;
+        const totalCarsValue = action.payload.totalCars;
+        state.totalItems = typeof totalCarsValue === 'number' ? totalCarsValue : 0;
+        state.totalPages = state.limit > 0 ? Math.ceil(state.totalItems / state.limit) : 0;
         state.isLoading = false;
       })
-      .addCase(loadInitialVehicles.rejected, handleRejectedReducer)
-
+      .addCase(loadInitialVehicles.rejected, handleRejected)
       .addCase(loadMoreVehicles.pending, handlePending)
       .addCase(loadMoreVehicles.fulfilled, (state, action: FulfilledThunkAction<FetchVehiclesApiResponse, FetchVehiclesParams>) => {
         state.items.push(...(action.payload.cars || []));
         state.page = action.payload.page ? parseInt(action.payload.page, 10) : state.page;
-        if (action.payload.totalCars !== undefined) {
-            const totalCars = action.payload.totalCars;
-            state.totalItems = totalCars;
-            state.totalPages = state.limit > 0 ? Math.ceil(totalCars / state.limit) : 0;
+        const totalCarsValue = action.payload.totalCars;
+        if (typeof totalCarsValue === 'number') {
+            state.totalItems = totalCarsValue;
+            state.totalPages = state.limit > 0 ? Math.ceil(totalCarsValue / state.limit) : 0;
         }
         state.isLoading = false;
       })
-      .addCase(loadMoreVehicles.rejected, handleRejectedReducer)
-
+      .addCase(loadMoreVehicles.rejected, handleRejected)
       .addCase(fetchVehicleById.pending, handlePending)
       .addCase(fetchVehicleById.fulfilled, (state, action: PayloadAction<CatalogItem>) => {
         state.currentVehicle = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchVehicleById.rejected, handleRejectedReducer),
+      .addCase(fetchVehicleById.rejected, handleRejected),
 });
 
 export const {

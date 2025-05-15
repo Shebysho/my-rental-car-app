@@ -40,35 +40,24 @@ const theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 375,    
-      md: 768,    
-      lg: 1440,   
-      xl: 1920,   
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
     },
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        html: {
-          height: '100%',
-          scrollBehavior: 'smooth',
-        },
+        html: { height: '100%', scrollBehavior: 'smooth' },
         body: {
           backgroundColor: '#FFFFFF', 
           color: textColorPrimary,
-          lineHeight: '1.5',
-          minHeight: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+          lineHeight: '1.5', minHeight: '100%',
+          display: 'flex', flexDirection: 'column',
         },
-        '#root': {
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        },
-        main: {
-          flexGrow: 1,
-        },
+        '#root': { flexGrow: 1, display: 'flex', flexDirection: 'column' },
+        main: { flexGrow: 1 },
         ul: { listStyle: 'none', padding: 0, margin: 0 },
         a: { textDecoration: 'none', color: 'inherit' },
       },
@@ -88,14 +77,14 @@ const theme = createTheme({
       }],
     },
     MuiContainer: {
-      defaultProps: { maxWidth: 'lg' }, 
+      defaultProps: { maxWidth: 'lg' },
       styleOverrides: {
         root: ({ theme: t }) => ({
-          width: '100%', paddingLeft: '15px', paddingRight: '15px',
+          width: '100%', paddingLeft: t.spacing(2), paddingRight: t.spacing(2),
           marginLeft: 'auto', marginRight: 'auto',
-          [t.breakpoints.up('sm')]: { paddingLeft: '20px', paddingRight: '20px' },
-          [t.breakpoints.up('md')]: { paddingLeft: '32px', paddingRight: '32px' },
-          [t.breakpoints.up('lg')]: { maxWidth: '1184px' } 
+          [t.breakpoints.up('sm')]: { paddingLeft: t.spacing(3), paddingRight: t.spacing(3) },
+          [t.breakpoints.up('md')]: { paddingLeft: t.spacing(4), paddingRight: t.spacing(4) },
+          [t.breakpoints.up('lg')]: { maxWidth: '1184px' }
         }),
       },
     },
@@ -103,25 +92,23 @@ const theme = createTheme({
       styleOverrides: {
         root: { borderRadius: '12px', textTransform: 'none', fontWeight: 600,
                 lineHeight: 1.428, padding: '12px 24px',
-                transition: 'background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease',
-                boxShadow: 'none',
+                transition: 'background-color 0.3s ease', boxShadow: 'none',
         },
       },
       variants: [{
         props: { variant: 'appButton' },
         style: ({theme: t}) => ({
-          minWidth: '168px', height: '44px', padding: '12px 50px',
           color: t.palette.common.white, backgroundColor: t.palette.primary.light,
           '&:hover, &:focus': { backgroundColor: t.palette.primary.main },
         }),
       }],
     },
-    MuiSelect: {  },
-    MuiMenuItem: { },
-    MuiInputLabel: {  },
-    MuiOutlinedInput: { },
-    MuiFilledInput: {  },
-    MuiChip: {  },
+    MuiSelect: { /* Ваші узгоджені стилі з попередніх версій */ },
+    MuiMenuItem: { /* Ваші узгоджені стилі */ },
+    MuiInputLabel: { /* Ваші узгоджені стилі */ },
+    MuiOutlinedInput: { /* Ваші узгоджені стилі */ },
+    MuiFilledInput: { /* Ваші узгоджені стилі */ },
+    MuiChip: { /* Ваші узгоджені стилі */ },
   },
 });
 

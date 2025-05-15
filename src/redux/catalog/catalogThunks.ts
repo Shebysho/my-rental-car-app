@@ -3,58 +3,65 @@ import { isAxiosError } from 'axios';
 import axiosInstance from '@/api/axiosInstance';
 import type { CatalogItem, Filters } from './catalogTypes';
 
-type FetchVehiclesResponse = {
+export type FetchVehiclesApiResponse = {
   cars: CatalogItem[];
   totalCars?: number;
-  page?: number;
-  totalPages?: number;
+  page?: string;
 };
 
-type FetchVehiclesParams = Partial<Filters> & { page: number; limit: number };
+export type FetchVehiclesParams = Partial<Filters> & { page: number; limit: number };
 
-export const loadInitialVehicles = createAsyncThunk(
+export const loadInitialVehicles = createAsyncThunk<
+  FetchVehiclesApiResponse,
+  FetchVehiclesParams,
+  { rejectValue: string }
+>(
   'catalog/loadInitial',
-  async (params: FetchVehiclesParams, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.get<FetchVehiclesResponse>('/cars', {
-        params,
-      });
+      const { data } = await axiosInstance.get<FetchVehiclesApiResponse>('/cars', { params });
       return data;
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(error.response?.data?.message || 'Failed to load vehicles.');
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data?.message || 'Failed to load vehicles.');
       }
       return rejectWithValue('An unexpected error occurred while loading vehicles.');
     }
   }
 );
 
-export const loadMoreVehicles = createAsyncThunk(
+export const loadMoreVehicles = createAsyncThunk<
+  FetchVehiclesApiResponse,
+  FetchVehiclesParams,
+  { rejectValue: string }
+>(
   'catalog/loadMore',
-  async (params: FetchVehiclesParams, { rejectWithValue }) => {
+  async (params, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.get<FetchVehiclesResponse>('/cars', {
-        params,
-      });
+      const { data } = await axiosInstance.get<FetchVehiclesApiResponse>('/cars', { params });
       return data;
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(error.response?.data?.message || 'Failed to load more vehicles.');
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data?.message || 'Failed to load more vehicles.');
       }
       return rejectWithValue('An unexpected error occurred while loading more vehicles.');
     }
   }
 );
 
-export const fetchVehicleById = createAsyncThunk(
+export const fetchVehicleById = createAsyncThunk<
+  CatalogItem,
+  string,
+  { rejectValue: string }
+>(
   'catalog/fetchById',
-  async (id: string, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const { data } = await axiosInstance.get<CatalogItem>(`/cars/${id}`);
       return data;
     } catch (error) {
-      if (isAxiosError(error)) {
-        return rejectWithValue(error.response?.data?.message || `Failed to load vehicle details for ID: ${id}.`);
+      if (isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data?.message || `Failed to load vehicle details for ID: ${id}.`);
       }
       return rejectWithValue('An unexpected error occurred while fetching vehicle details.');
     }
