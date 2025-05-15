@@ -6,8 +6,8 @@ import type { FetchVehiclesApiResponse, FetchVehiclesParams } from './catalogThu
 interface FulfilledThunkAction<Returned, ThunkArg> extends PayloadAction<Returned, string, {arg: ThunkArg, requestId: string, requestStatus: 'fulfilled'}> {}
 
 interface RejectedActionPayloadWithMessage { message?: string; }
-interface RejectedThunkAction extends AnyAction {
-  error: Error & { code?: string };
+interface RejectedThunkAction extends AnyAction { // Змінено для кращої сумісності
+  error: Error & { code?: string }; // error завжди має бути присутнім для rejected thunk
   meta: { arg: any; requestId: string; aborted?: boolean; condition?: boolean; rejectedWithValue?: boolean; };
   payload?: RejectedActionPayloadWithMessage | string | unknown;
 }

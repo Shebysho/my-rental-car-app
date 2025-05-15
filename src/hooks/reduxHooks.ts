@@ -14,6 +14,8 @@ export const useCatalogState = () => {
   const limit = useAppSelector(catalogSelectors.selectLimit); 
   const totalPages = useAppSelector(catalogSelectors.selectTotalPages);
   const queryParams = useAppSelector(catalogSelectors.selectQueryParams);
+  const error = useAppSelector(catalogSelectors.selectError); 
+  const totalItems = useAppSelector(catalogSelectors.selectTotalItems); 
 
   return {
     vehicles: items,
@@ -23,6 +25,8 @@ export const useCatalogState = () => {
     page,
     limit,
     totalPages,
+    totalItems, 
+    error,     
     queryParams,
   };
 };

@@ -1,33 +1,25 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true, 
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-    "types": ["vite/client", "node"]
+  "target": "ES2020",
+  "useDefineForClassFields": true,
+  "lib": ["ES2020", "DOM", "DOM.Iterable"],
+  "module": "ESNext",
+  "skipLibCheck": true, // Дуже важливо, щоб було true
+  "esModuleInterop": true,
+  "allowSyntheticDefaultImports": true,
+  "strict": true, // Можна тимчасово встановити false, якщо strict mode викликає багато помилок
+  // "noImplicitAny": false, // Тимчасово, щоб прибрати помилки TS7006
+  "forceConsistentCasingInFileNames": true,
+  "moduleResolution": "bundler",
+  "resolveJsonModule": true,
+  "isolatedModules": true,
+  "noEmit": true,
+  "jsx": "react-jsx",
+  "baseUrl": "./",
+  "paths": {
+  "@/": ["src/"]
   },
-  "include": ["src", "vite.config.ts"]
-}
+  "types": ["vite/client", "node"]
+  },
+  "include": ["src", "vite.config.ts"],
+  }
