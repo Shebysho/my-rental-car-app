@@ -73,7 +73,7 @@ const catalogSlice = createSlice({
         state.items = action.payload.cars || [];
         state.page = action.payload.page ? parseInt(action.payload.page, 10) : 1;
         state.totalItems = action.payload.totalCars || 0;
-        state.totalPages = Math.ceil((action.payload.totalCars || 0) / state.limit);
+        state.totalPages = Math.ceil((action.payload.totalCars || 0) / state.limit) || 0;
         state.isLoading = false;
       })
       .addCase(loadInitialVehicles.rejected, handleRejected)
@@ -84,7 +84,7 @@ const catalogSlice = createSlice({
         state.page = action.payload.page ? parseInt(action.payload.page, 10) : state.page;
         if (action.payload.totalCars !== undefined) {
             state.totalItems = action.payload.totalCars;
-            state.totalPages = Math.ceil(action.payload.totalCars / state.limit);
+            state.totalPages = Math.ceil(action.payload.totalCars / state.limit) || 0;
         }
         state.isLoading = false;
       })
