@@ -1,25 +1,24 @@
 {
   "compilerOptions": {
-  "target": "ES2020",
-  "useDefineForClassFields": true,
-  "lib": ["ES2020", "DOM", "DOM.Iterable"],
-  "module": "ESNext",
-  "skipLibCheck": true, // Дуже важливо, щоб було true
-  "esModuleInterop": true,
-  "allowSyntheticDefaultImports": true,
-  "strict": true, // Можна тимчасово встановити false, якщо strict mode викликає багато помилок
-  // "noImplicitAny": false, // Тимчасово, щоб прибрати помилки TS7006
-  "forceConsistentCasingInFileNames": true,
-  "moduleResolution": "bundler",
-  "resolveJsonModule": true,
-  "isolatedModules": true,
-  "noEmit": true,
-  "jsx": "react-jsx",
-  "baseUrl": "./",
-  "paths": {
-  "@/": ["src/"]
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["vite/client", "node"]
   },
-  "types": ["vite/client", "node"]
-  },
-  "include": ["src", "vite.config.ts"],
-  }
+  "include": ["src", "vite.config.ts"]
+}

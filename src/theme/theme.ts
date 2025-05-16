@@ -1,7 +1,7 @@
-import { createTheme, alpha } from '@mui/material/styles';
+import { createTheme, alpha, Breakpoint } from '@mui/material/styles'; 
 
-const primaryMainColor = '#0B44CD'; 
-const primaryLightColor = '#3470FF'; 
+const primaryMainColor = '#0B44CD';
+const primaryLightColor = '#3470FF';
 const textColorPrimary = '#121417';
 const textColorSecondary = alpha(textColorPrimary, 0.5);
 
@@ -10,13 +10,14 @@ const theme = createTheme({
     primary: { main: primaryMainColor, light: primaryLightColor },
     text: { primary: textColorPrimary, secondary: textColorSecondary },
     background: { default: '#FFFFFF', paper: '#FFFFFF' },
-    divider: alpha(textColorPrimary, 0.1), 
+    divider: alpha(textColorPrimary, 0.1),
   },
   typography: {
     fontFamily: ['Manrope', 'Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'].join(','),
     fontSize: 16,
     h1: { fontSize: 'clamp(2.5rem, 5vw, 3.75rem)', fontWeight: 700, lineHeight: 1.2, color: textColorPrimary },
     h2: { fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', fontWeight: 600, lineHeight: 1.33, color: textColorPrimary },
+   
     navLink: { 
       fontSize: '16px', fontWeight: 500, lineHeight: 1.5,
       textDecoration: 'none', transition: 'color 0.2s ease-in-out',
@@ -24,7 +25,7 @@ const theme = createTheme({
     }
   },
   breakpoints: {
-    values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 },
+    values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 }, 
   },
   components: {
     MuiCssBaseline: {
@@ -42,7 +43,14 @@ const theme = createTheme({
       variants: [{
         props: { variant: 'navLink' },
         style: ({ theme: t }) => ({
-          color: t.palette.text.primary, 
+         
+          fontSize: t.typography.navLink?.fontSize || '16px', 
+          fontWeight: t.typography.navLink?.fontWeight || 500,
+          lineHeight: t.typography.navLink?.lineHeight || 1.5,
+          textDecoration: t.typography.navLink?.textDecoration || 'none',
+          transition: t.typography.navLink?.transition || 'color 0.2s ease-in-out',
+          borderBottom: t.typography.navLink?.borderBottom || '2px solid transparent',
+          color: t.palette.text.primary,
           paddingTop: '23px', paddingBottom: '23px',
           '&:hover': { color: t.palette.primary.light },
           '&.active': { color: t.palette.primary.light },
@@ -50,14 +58,14 @@ const theme = createTheme({
       }],
     },
     MuiContainer: {
-      defaultProps: { maxWidth: 'lg' },
+      defaultProps: { maxWidth: 'lg' as Breakpoint | false }, 
       styleOverrides: {
         root: ({ theme: t }) => ({
           width: '100%', paddingLeft: t.spacing(2), paddingRight: t.spacing(2),
           marginLeft: 'auto', marginRight: 'auto',
-          [t.breakpoints.up('sm')]: { paddingLeft: t.spacing(3), paddingRight: t.spacing(3) },
-          [t.breakpoints.up('md')]: { paddingLeft: t.spacing(4), paddingRight: t.spacing(4) },
-          [t.breakpoints.up('lg')]: { maxWidth: '1184px' }
+          [t.breakpoints.up('sm' as Breakpoint)]: { paddingLeft: t.spacing(3), paddingRight: t.spacing(3) }, 
+          [t.breakpoints.up('md' as Breakpoint)]: { paddingLeft: t.spacing(4), paddingRight: t.spacing(4) }, 
+           [t.breakpoints.up('lg' as Breakpoint)]: { maxWidth: '1184px', paddingLeft: t.spacing(0), paddingRight: t.spacing(0) }, // Приклад для lg, якщо default 'lg' не 1184px
         }),
       },
     },
@@ -76,12 +84,6 @@ const theme = createTheme({
         }),
       }],
     },
-    MuiSelect: { /* Ваші узгоджені стилі */ },
-    MuiMenuItem: { /* Ваші узгоджені стилі */ },
-    MuiInputLabel: { /* Ваші узгоджені стилі */ },
-    MuiOutlinedInput: { /* Ваші узгоджені стилі */ },
-    MuiFilledInput: { /* Ваші узгоджені стилі */ },
-    MuiChip: { /* Ваші узгоджені стилі */ },
   },
 });
 

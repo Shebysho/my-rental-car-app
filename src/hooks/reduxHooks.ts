@@ -10,12 +10,12 @@ export const useCatalogState = () => {
   const favourites = useAppSelector(catalogSelectors.selectFavourites);
   const filters = useAppSelector(catalogSelectors.selectFilters);
   const isLoading = useAppSelector(catalogSelectors.selectIsLoading);
-  const page = useAppSelector(catalogSelectors.selectPage); 
-  const limit = useAppSelector(catalogSelectors.selectLimit); 
+  const page = useAppSelector(catalogSelectors.selectPage);
+  const limit = useAppSelector(catalogSelectors.selectLimit);
   const totalPages = useAppSelector(catalogSelectors.selectTotalPages);
-  const queryParams = useAppSelector(catalogSelectors.selectQueryParams);
-  const error = useAppSelector(catalogSelectors.selectError); 
-  const totalItems = useAppSelector(catalogSelectors.selectTotalItems); 
+  const queryParams = useAppSelector(catalogSelectors.selectQueryParams); 
+  const error = useAppSelector(catalogSelectors.selectError);
+  const totalItems = useAppSelector(catalogSelectors.selectTotalItems);
 
   return {
     vehicles: items,
@@ -25,8 +25,8 @@ export const useCatalogState = () => {
     page,
     limit,
     totalPages,
-    totalItems, 
-    error,     
-    queryParams,
+    totalItems,
+    error,
+    queryParams: queryParams,
   };
 };
